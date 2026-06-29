@@ -1,88 +1,137 @@
-const PHONE = '917629048752';
+const PHONE = "917629048752";
 
 const fixtures = [
-['🇧🇷 Brazil','🇯🇵 Japan'],['🇩🇪 Germany','🇵🇾 Paraguay'],['🇳🇱 Netherlands','🇲🇦 Morocco'],
-['🇨🇮 Ivory Coast','🇳🇴 Norway'],['🇫🇷 France','🇸🇪 Sweden'],['🇲🇽 Mexico','🇪🇨 Ecuador'],
-['🏴 England','🇨🇩 DR Congo'],['🇧🇪 Belgium','🇸🇳 Senegal'],['🇺🇸 USA','🇧🇦 Bosnia & Herzegovina'],
-['🇪🇸 Spain','🇦🇹 Austria'],['🇵🇹 Portugal','🇭🇷 Croatia'],['🇨🇭 Switzerland','🇩🇿 Algeria'],
-['🇦🇺 Australia','🇪🇬 Egypt'],['🇦🇷 Argentina','🇨🇻 Cape Verde'],['🇨🇴 Colombia','🇬🇭 Ghana']
+["🇵🇹 Portugal","🇭🇷 Croatia"],
+["🇧🇷 Brazil","🇯🇵 Japan"],
+["🇩🇪 Germany","🇵🇾 Paraguay"],
+["🇫🇷 France","🇸🇪 Sweden"],
+["🇪🇸 Spain","🇦🇹 Austria"],
+["🇦🇷 Argentina","🇨🇻 Cape Verde"],
+["🏴 England","🇨🇩 DR Congo"],
+["🇧🇪 Belgium","🇸🇳 Senegal"],
+["🇳🇱 Netherlands","🇲🇦 Morocco"],
+["🇲🇽 Mexico","🇪🇨 Ecuador"],
+["🇺🇸 USA","🇧🇦 Bosnia & Herzegovina"],
+["🇨🇭 Switzerland","🇩🇿 Algeria"],
+["🇦🇺 Australia","🇪🇬 Egypt"],
+["🇨🇴 Colombia","🇬🇭 Ghana"],
+["🇨🇮 Ivory Coast","🇳🇴 Norway"]
 ];
 
-const picks = {};
-
-const matches = document.getElementById("matches");
+const matchesDiv = document.getElementById("matches");
+const submitBtn = document.getElementById("submit");
 const nameInput = document.getElementById("name");
 const phoneInput = document.getElementById("phone");
-const submitBtn = document.getElementById("submit");
+const progressBar = document.getElementById("progressBar");
+const progressText = document.getElementById("progressText");
 const countdown = document.getElementById("countdown");
 
-fixtures.forEach((f,i)=>{
-    let d=document.createElement("div");
-    d.className="match";
+const predictions = {};
 
-    d.innerHTML=`
-    <div class="team">${i+1}. ${f[0]} vs ${f[1]}</div>
-    <div class="row">
-        <button class="pick">${f[0]} Win</button>
-        <button class="pick">Draw</button>
-        <button class="pick">${f[1]} Win</button>
-    </div>`;
+fixtures.forEach((match,index)=>{
 
-    let bs=d.querySelectorAll(".pick");
+    const card=document.createElement("div");
+    card.className="match";
 
-    bs.forEach((b,n)=>{
-        b.onclick=()=>{
-            bs.forEach(x=>x.classList.remove("selected"));
-            b.classList.add("selected");
-            picks[i]=n===0?f[0]:n===1?"Draw":f[1];
-            check();
+    card.innerHTML=`
+    <div class="team">${index+1}. ${match[0]} vs ${match[1]}</div>
+    <div class="row"></div>
+    `;
+
+    const row=card.querySelector(".row");
+
+    [match[0],"Draw",match[1]].forEach(choice=>{
+
+        const btn=document.createElement("button");
+
+        btn.className="pick";
+
+        btn.textContent=choice;
+
+        btn.onclick=()=>{
+
+            row.querySelectorAll(".pick").forEach(x=>x.classList.remove("selected"));
+
+            btn.classList.add("selected");
+
+            predictions[index]=choice;
+
+            updateProgress();
+
         };
+
+        row.appendChild(btn);
+
     });
 
-    matches.appendChild(d);
+    matchesDiv.appendChild(card);
+
 });
 
-function check(){
-    submitBtn.disabled = !(
+function updateProgress(){
+
+    const completed=Object.keys(predictions).length;
+
+    progressText.innerHTML=`${completed} / ${fixtures.length} Predictions Selected`;
+
+    progressBar.style.width=(completed/fixtures.length*100)+"%";
+
+    submitBtn.disabled=!(
         nameInput.value.trim() &&
         phoneInput.value.trim() &&
-        Object.keys(picks).length===15
+        completed===fixtures.length
     );
+
 }
 
-nameInput.oninput = check;
-phoneInput.oninput = check;
+nameInput.addEventListener("input",updateProgress);
+phoneInput.addEventListener("input",updateProgress);
 
-submitBtn.onclick = () => {
+submitBtn.addEventListener("click",function(){
 
-    let text=`🏆 FIFA World Cup 2026 Prediction
+    let message=`🏆 FIFA World Cup 2026 Prediction\n\n`;
 
-Name: ${nameInput.value}
-Phone: ${phoneInput.value}
+    message+=`Name: ${nameInput.value}\n`;
+    message+=`Phone: ${phoneInput.value}\n\n`;
 
-`;
+    fixtures.forEach((match,index)=>{
 
-    fixtures.forEach((f,i)=>{
-        text += ${f[0]} vs ${f[1]}: ${picks[i]}\n;
+        message+=`${match[0]} vs ${match[1]} : ${predictions[index]}\n`;
+
     });
 
-    window.location.href =
-        https://wa.me/${PHONE}?text=${encodeURIComponent(text)};
-};
+    const url=`https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`;
 
-const target = new Date("2026-07-02T19:00:00");
+    window.location.href=url;
 
-setInterval(()=>{
-    let d = target - new Date();
+});
 
-    if(d<0){
-        countdown.innerHTML="Predictions Closed";
+const endDate=new Date("2026-07-02T19:00:00");
+
+function updateCountdown(){
+
+    const now=new Date();
+
+    const diff=endDate-now;
+
+    if(diff<=0){
+
+        countdown.innerHTML="⛔ Predictions Closed";
+
         return;
+
     }
 
-    let days=Math.floor(d/86400000);
-    let h=Math.floor((d%86400000)/3600000);
-    let m=Math.floor((d%3600000)/60000);
+    const days=Math.floor(diff/86400000);
 
-    countdown.innerHTML=⏳ ${days}d ${h}h ${m}m remaining;
-},1000);
+    const hours=Math.floor(diff%86400000/3600000);
+
+    const minutes=Math.floor(diff%3600000/60000);
+
+    countdown.innerHTML=`⏳ ${days}d ${hours}h ${minutes}m Remaining`;
+
+}
+
+updateCountdown();
+
+setInterval(updateCountdown,1000);
