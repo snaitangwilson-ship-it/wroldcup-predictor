@@ -15,6 +15,7 @@ m.appendChild(d);});
 function check(){submit.disabled=!(name.value&&phone.value&&Object.keys(picks).length===15)}
 name.oninput=phone.oninput=check;
 submit.onclick=()=>{
+    alert("Button clicked");
 let t='🏆 FIFA World Cup 2026 Prediction\n\nName: '+name.value+'\nPhone: '+phone.value+'\n\n';
 fixtures.forEach((f,i)=>t+=`${f[0]} vs ${f[1]}: ${picks[i]}\n`);
 open('https://wa.me/'+PHONE+'?text='+encodeURIComponent(t),'_blank');
