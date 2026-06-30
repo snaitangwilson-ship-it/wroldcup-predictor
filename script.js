@@ -1,21 +1,18 @@
 const PHONE = "917629048752";
 
 const fixtures = [
-["🇵🇹 Portugal","🇭🇷 Croatia"],
-["🇧🇷 Brazil","🇯🇵 Japan"],
-["🇩🇪 Germany","🇵🇾 Paraguay"],
 ["🇫🇷 France","🇸🇪 Sweden"],
 ["🇪🇸 Spain","🇦🇹 Austria"],
 ["🇦🇷 Argentina","🇨🇻 Cape Verde"],
 ["🏴 England","🇨🇩 DR Congo"],
 ["🇧🇪 Belgium","🇸🇳 Senegal"],
-["🇳🇱 Netherlands","🇲🇦 Morocco"],
 ["🇲🇽 Mexico","🇪🇨 Ecuador"],
 ["🇺🇸 USA","🇧🇦 Bosnia & Herzegovina"],
 ["🇨🇭 Switzerland","🇩🇿 Algeria"],
 ["🇦🇺 Australia","🇪🇬 Egypt"],
 ["🇨🇴 Colombia","🇬🇭 Ghana"],
-["🇨🇮 Ivory Coast","🇳🇴 Norway"]
+["🇨🇮 Ivory Coast","🇳🇴 Norway"],
+["🇵🇹 Portugal","🇭🇷 Croatia"]
 ];
 
 const matchesDiv = document.getElementById("matches");
@@ -28,33 +25,31 @@ const countdown = document.getElementById("countdown");
 
 const predictions = {};
 
-fixtures.forEach((match,index)=>{
+fixtures.forEach((match, index) => {
 
-    const card=document.createElement("div");
-    card.className="match";
+    const card = document.createElement("div");
+    card.className = "match";
 
-    card.innerHTML=`
-    <div class="team">${index+1}. ${match[0]} vs ${match[1]}</div>
-    <div class="row"></div>
+    card.innerHTML = `
+        <div class="team">${index + 1}. ${match[0]} vs ${match[1]}</div>
+        <div class="row"></div>
     `;
 
-    const row=card.querySelector(".row");
+    const row = card.querySelector(".row");
 
-    [match[0],"Draw",match[1]].forEach(choice=>{
+    [match[0], "Draw", match[1]].forEach(choice => {
 
-        const btn=document.createElement("button");
+        const btn = document.createElement("button");
+        btn.className = "pick";
+        btn.textContent = choice;
 
-        btn.className="pick";
+        btn.onclick = () => {
 
-        btn.textContent=choice;
-
-        btn.onclick=()=>{
-
-            row.querySelectorAll(".pick").forEach(x=>x.classList.remove("selected"));
+            row.querySelectorAll(".pick").forEach(x => x.classList.remove("selected"));
 
             btn.classList.add("selected");
 
-            predictions[index]=choice;
+            predictions[index] = choice;
 
             updateProgress();
 
@@ -68,70 +63,71 @@ fixtures.forEach((match,index)=>{
 
 });
 
-function updateProgress(){
+function updateProgress() {
 
-    const completed=Object.keys(predictions).length;
+    const completed = Object.keys(predictions).length;
 
-    progressText.innerHTML=`${completed} / ${fixtures.length} Predictions Selected`;
+    progressText.innerHTML = `${completed} / ${fixtures.length} Predictions Selected`;
 
-    progressBar.style.width=(completed/fixtures.length*100)+"%";
+    progressBar.style.width = (completed / fixtures.length * 100) + "%";
 
-    submitBtn.disabled=!(
+    submitBtn.disabled = !(
         nameInput.value.trim() &&
         phoneInput.value.trim() &&
-        completed===fixtures.length
+        completed === fixtures.length
     );
 
 }
 
-nameInput.addEventListener("input",updateProgress);
-phoneInput.addEventListener("input",updateProgress);
+nameInput.addEventListener("input", updateProgress);
+phoneInput.addEventListener("input", updateProgress);
 
-submitBtn.addEventListener("click",function(){
+submitBtn.addEventListener("click", function () {
 
-    let message=`🏆 FIFA World Cup 2026 Prediction\n\n`;
+    let message = `🏆 FIFA World Cup 2026 Prediction\n\n`;
 
-    message+=`Name: ${nameInput.value}\n`;
-    message+=`Phone: ${phoneInput.value}\n\n`;
+    message += `Name: ${nameInput.value}\n`;
+    message += `Phone: ${phoneInput.value}\n\n`;
 
-    fixtures.forEach((match,index)=>{
+    fixtures.forEach((match, index) => {
 
-        message+=`${match[0]} vs ${match[1]} : ${predictions[index]}\n`;
+        message += `${match[0]} vs ${match[1]} : ${predictions[index]}\n`;
 
     });
 
-    const url=`https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`;
 
-    window.location.href=url;
+    window.location.href = url;
 
 });
 
-const endDate=new Date("2026-07-02T19:00:00");
+// Countdown to the first remaining fixture
+const endDate = new Date("2026-06-30T17:00:00");
 
-function updateCountdown(){
+function updateCountdown() {
 
-    const now=new Date();
+    const now = new Date();
 
-    const diff=endDate-now;
+    const diff = endDate - now;
 
-    if(diff<=0){
+    if (diff <= 0) {
 
-        countdown.innerHTML="⛔ Predictions Closed";
+        countdown.innerHTML = "⛔ Predictions Closed";
+        submitBtn.disabled = true;
 
         return;
 
     }
 
-    const days=Math.floor(diff/86400000);
+    const days = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const minutes = Math.floor((diff % 3600000) / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
 
-    const hours=Math.floor(diff%86400000/3600000);
-
-    const minutes=Math.floor(diff%3600000/60000);
-
-    countdown.innerHTML=`⏳ ${days}d ${hours}h ${minutes}m Remaining`;
+    countdown.innerHTML = `⏳ ${days}d ${hours}h ${minutes}m ${seconds}s Remaining`;
 
 }
 
 updateCountdown();
 
-setInterval(updateCountdown,1000);
+setInterval(updateCountdown, 1000);
