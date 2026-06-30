@@ -101,8 +101,8 @@ submitBtn.addEventListener("click", function () {
 
 });
 
-// Countdown to the first remaining fixture
-const endDate = new Date("2026-06-30T17:00:00");
+// Countdown closes at 10:00 PM today
+const endDate = new Date("2026-06-30T22:00:00");
 
 function updateCountdown() {
 
