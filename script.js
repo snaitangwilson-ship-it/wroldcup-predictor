@@ -1,7 +1,5 @@
 const PHONE = "917629048752";
 
-const PHONE = "917629048752";
-
 const fixtures = [
 ["🇪🇸 Spain","🇦🇹 Austria"],
 ["🇦🇷 Argentina","🇨🇻 Cape Verde"],
@@ -45,7 +43,6 @@ fixtures.forEach((match, index) => {
         btn.onclick = () => {
 
             row.querySelectorAll(".pick").forEach(x => x.classList.remove("selected"));
-
             btn.classList.add("selected");
 
             predictions[index] = choice;
@@ -89,9 +86,7 @@ submitBtn.addEventListener("click", function () {
     message += `Phone: ${phoneInput.value}\n\n`;
 
     fixtures.forEach((match, index) => {
-
         message += `${match[0]} vs ${match[1]} : ${predictions[index]}\n`;
-
     });
 
     const url = `https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`;
@@ -100,20 +95,18 @@ submitBtn.addEventListener("click", function () {
 
 });
 
-// Countdown closes at 10:00 PM today
-const endDate = new Date("2026-06-30T22:00:00");
+// Predictions close at 10:00 PM today
+const endDate = new Date("2026-07-01T22:00:00");
 
 function updateCountdown() {
 
     const now = new Date();
-
     const diff = endDate - now;
 
     if (diff <= 0) {
 
         countdown.innerHTML = "⛔ Predictions Closed";
         submitBtn.disabled = true;
-
         return;
 
     }
@@ -128,5 +121,4 @@ function updateCountdown() {
 }
 
 updateCountdown();
-
 setInterval(updateCountdown, 1000);
