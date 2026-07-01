@@ -1,17 +1,16 @@
 const PHONE = "917629048752";
 
+const PHONE = "917629048752";
+
 const fixtures = [
-["🇫🇷 France","🇸🇪 Sweden"],
 ["🇪🇸 Spain","🇦🇹 Austria"],
 ["🇦🇷 Argentina","🇨🇻 Cape Verde"],
 ["🏴 England","🇨🇩 DR Congo"],
 ["🇧🇪 Belgium","🇸🇳 Senegal"],
-["🇲🇽 Mexico","🇪🇨 Ecuador"],
 ["🇺🇸 USA","🇧🇦 Bosnia & Herzegovina"],
 ["🇨🇭 Switzerland","🇩🇿 Algeria"],
 ["🇦🇺 Australia","🇪🇬 Egypt"],
 ["🇨🇴 Colombia","🇬🇭 Ghana"],
-["🇨🇮 Ivory Coast","🇳🇴 Norway"],
 ["🇵🇹 Portugal","🇭🇷 Croatia"]
 ];
 
