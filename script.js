@@ -3,9 +3,6 @@ const PHONE = "917629048752";
 const fixtures = [
 ["🇪🇸 Spain","🇦🇹 Austria"],
 ["🇦🇷 Argentina","🇨🇻 Cape Verde"],
-["🏴 England","🇨🇩 DR Congo"],
-["🇧🇪 Belgium","🇸🇳 Senegal"],
-["🇺🇸 USA","🇧🇦 Bosnia & Herzegovina"],
 ["🇨🇭 Switzerland","🇩🇿 Algeria"],
 ["🇦🇺 Australia","🇪🇬 Egypt"],
 ["🇨🇴 Colombia","🇬🇭 Ghana"],
@@ -96,7 +93,7 @@ submitBtn.addEventListener("click", function () {
 });
 
 // Predictions close at 10:00 PM today
-const endDate = new Date("2026-07-01T22:00:00");
+const endDate = new Date("2026-07-02T22:00:00");
 
 function updateCountdown() {
 
